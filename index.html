@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherChecker by Jorge Calderon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        
+        header {
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 2%;
+        }
+        
+        .cities {
+            padding: 3%;
+        }
+        
+        .main {
+            padding: 5%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <header>
+                    <h1>Weater Checker Web APP</h1>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-md-3 cities">
+                <aside>
+                    <form>
+                        <div class="form-group">
+                            <label for="city-txt">City: </label>
+                            <input type="text" class="form-control" id="city-txt" aria-describedby="citylHelp">
+                            <small id="citylHelp" class="form-text text-muted">Enter city to look up for weather conditions.</small>
+                        </div>
+                        <div class="form-group">
+                            <button id="city-submit" type="submit">Submit</button>
+                        </div>
+                    </form>
+                    <ul>
+                        <li>City 1</li>
+                        <li>City 2</li>
+                        <li>City 3</li>
+                    </ul>
+                </aside>
+            </div>
+            <div calss="col-sm-8 col-md-9 main">
+                <div id="uno" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1>Uno</h1>
+                    </div>
+                </div>
+                <div id="dos" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1>Dos</h1>
+                    </div>
+                </div>
+                <div id="tres" class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <h1>Tres</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $("form").on("submit", function() {
+        const city = $('#city-txt').val();
+        let url1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=4ebb8d7264ca67547a6a7bdbe2deada9";
+        $.ajax({
+            url: url1,
+            method: "GET"
+        }).then(function(response) {
+            console.log(response);
+        });
+    });
+</script>
+
+</html>
