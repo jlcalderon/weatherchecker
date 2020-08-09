@@ -51,10 +51,7 @@
                             <button id="city-submit" type="submit">Submit</button>
                         </div>
                     </form>
-                    <ul>
-                        <li>City 1</li>
-                        <li>City 2</li>
-                        <li>City 3</li>
+                    <ul class="list-group">
                     </ul>
                 </aside>
             </div>
@@ -80,16 +77,35 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
-    $("form").on("submit", function() {
+    $("form").on("submit", function(e) {
+        e.preventDefault();
         const city = $('#city-txt').val();
-        let url1 = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=4ebb8d7264ca67547a6a7bdbe2deada9";
+        var APIKey = "4ebb8d7264ca67547a6a7bdbe2deada9";
+        var url2 = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+        var url1 = "http://api.openweathermap.org/data/2.5/weather?" +
+            "q=" + city + "&APPID=" + APIKey;
         $.ajax({
-            url: url1,
+            url: url2,
             method: "GET"
         }).then(function(response) {
             console.log(response);
+            let cityEl = $("<li>");
+            cityEl.text(response.name);
+            cityEl.addClass("list-group-item");
+            cityEl.addClass("citiesLi");
+            cityEl.attr("data-name", response.name);
+            $("ul").append(cityEl);
         });
     });
+
+    //Grabing click event from citi clicked
+    $(document).on("click", ".citiesLi", alertCity);
+
+    //Function trigered by click on the cities
+    function alertCity() {
+        var city = $(this).attr("data-name");
+        alert(city);
+    }
 </script>
 
 </html>
