@@ -92,6 +92,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
     let responsesArray = [];
+    let tempArray = [];
     let responsesString = localStorage.getItem("weatherResponses");
     renderList();
     //This ready function grab the localstorage varaibles of current responses
@@ -143,6 +144,7 @@
 
             localStorage.setItem("weatherResponses", responsesString);
             //Creating and adding a <li> element to the <ul> list-group 
+
             let cityEl = $("<li>");
             cityEl.text(response.name);
             cityEl.addClass("list-group-item");
@@ -151,14 +153,34 @@
             $("ul").append(cityEl);
             $('#city-txt').val("");
         });
-
+        $("<ul>").html(" ");
     });
 
     //Grabing click event from city clicked
     $(document).on("click", ".citiesLi", function() {
         var city = $(this).attr("data-name");
-        alert(city);
+        const _dataContainer = $('#weatherInCity');
+        _dataContainer.html("");
+        const selectedCity = getCityWeather(city);
+        console.log(selectedCity[0].name);
+        const _dataCity = $("<h1>");
+        _dataCity.text(selectedCity[0].name);
+        _dataContainer.append(_dataCity);
+
+        const _dataTemp = $("<p>");
+        //var tempF = (response.main.temp - 273.15) * 1.80 + 32;
+        _dataTemp.text("Temperature in F: " + ((selectedCity[0].main.temp - 273.15) * 1.80 + 32).toFixed(2));
+        _dataContainer.append(_dataTemp);
+
     });
+
+    function getCityWeather(_city) {
+
+        for (let j = 0; j < responsesArray.length - 1; j++) {
+            tempArray.push(JSON.parse(responsesArray[j]));
+        }
+        return tempArray.filter((w) => w.name === _city);
+    }
 </script>
 
 </html>
