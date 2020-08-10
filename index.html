@@ -97,10 +97,29 @@
     //This ready function grab the localstorage varaibles of current responses
     //and fill the array to render the app with persistent information
     //let responsesString = localStorage.getItem("weatherResponses");
-
-
-
     //submit form function to make an API weather call by city 
+
+
+    function renderList() {
+        $('<ul>').html("");
+        if (responsesString) {
+            responsesArray = responsesString.split('///');
+        } else {
+            responsesString = " ";
+        }
+        //console.log(responsesArray);
+        for (let i = 0; i < responsesArray.length - 1; i++) {
+            console.log(JSON.parse(responsesArray[i]));
+            let cityEl = $("<li>");
+            cityEl.text(JSON.parse(responsesArray[i]).name);
+            cityEl.addClass("list-group-item");
+            cityEl.addClass("citiesLi");
+            cityEl.attr("data-name", JSON.parse(responsesArray[i]).name);
+            $("ul").append(cityEl);
+        }
+    }
+
+    //Form submission
     $("form").on("submit", function(e) {
         e.preventDefault();
         const city = $('#city-txt').val();
@@ -129,41 +148,17 @@
             cityEl.addClass("list-group-item");
             cityEl.addClass("citiesLi");
             cityEl.attr("data-name", response.name);
-            cityEl.on("click", alertCity);
             $("ul").append(cityEl);
             $('#city-txt').val("");
         });
 
     });
 
-    //Grabing click event from citi clicked
-    $(document).on("click", ".citiesLi", alertCity);
-
-    //Function trigered by click on the cities
-    function alertCity() {
+    //Grabing click event from city clicked
+    $(document).on("click", ".citiesLi", function() {
         var city = $(this).attr("data-name");
-        //console.log(JSON.parse(localStorage.getItem(city)));
-    }
-
-    function renderList() {
-        $('<ul>').html("");
-        if (responsesString) {
-            responsesArray = responsesString.split('///');
-        } else {
-            responsesString = " ";
-        }
-        //console.log(responsesArray);
-        for (let i = 0; i < responsesArray.length - 1; i++) {
-            console.log(JSON.parse(responsesArray[i]));
-            let cityEl = $("<li>");
-            cityEl.text(JSON.parse(responsesArray[i]).name);
-            cityEl.addClass("list-group-item");
-            cityEl.addClass("citiesLi");
-            cityEl.attr("data-name", JSON.parse(responsesArray[i]).name);
-            cityEl.on("click", alertCity);
-            $("ul").append(cityEl);
-        }
-    }
+        alert(city);
+    });
 </script>
 
 </html>
