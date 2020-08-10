@@ -38,6 +38,7 @@
             padding: 10px;
             margin-left: 30px;
             margin-top: 10px;
+            width: 100%;
         }
         
         #fiveDaysForecast {
@@ -89,6 +90,7 @@
         </div>
     </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
     let responsesArray = [];
@@ -116,6 +118,7 @@
             cityEl.addClass("list-group-item");
             cityEl.addClass("citiesLi");
             cityEl.attr("data-name", JSON.parse(responsesArray[i]).name);
+            // cityEL.attr("data-long",JSON.parse(responsesArray[i]).);
             $("ul").append(cityEl);
         }
     }
@@ -164,13 +167,22 @@
         const selectedCity = getCityWeather(city);
         console.log(selectedCity[0].name);
         const _dataCity = $("<h1>");
-        _dataCity.text(selectedCity[0].name);
+        let curday = moment().format('MM/DD/YY');
+        _dataCity.text(selectedCity[0].name + " " + curday + " " + selectedCity[0].weather[0].icon);
         _dataContainer.append(_dataCity);
 
         const _dataTemp = $("<p>");
         //var tempF = (response.main.temp - 273.15) * 1.80 + 32;
         _dataTemp.text("Temperature in F: " + ((selectedCity[0].main.temp - 273.15) * 1.80 + 32).toFixed(2));
         _dataContainer.append(_dataTemp);
+
+        const _dataHumidity = $("<p>");
+        _dataHumidity.text("Humidity: " + selectedCity[0].main.humidity + "%");
+        _dataContainer.append(_dataHumidity);
+
+        const _dataWindSpeed = $("<p>");
+        _dataWindSpeed.text("Wind Speed: " + selectedCity[0].wind.speed);
+        _dataContainer.append(_dataWindSpeed);
 
     });
 
