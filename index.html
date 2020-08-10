@@ -20,11 +20,30 @@
         }
         
         .cities {
+            margin-left: 15px;
             padding: 3%;
+            background-color: lightgray;
         }
         
         .main {
             padding: 5%;
+        }
+        
+        li {
+            border: 2px solid gray;
+        }
+        
+        #weatherInCity {
+            border: 2px solid gray;
+            padding: 10px;
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        
+        #fiveDaysForecast {
+            padding: 10px;
+            margin-left: 30px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -34,7 +53,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <header>
-                    <h1>Weater Checker Web APP</h1>
+                    <h1>Weather Checker</h1>
                 </header>
             </div>
         </div>
@@ -56,19 +75,14 @@
                 </aside>
             </div>
             <div calss="col-sm-8 col-md-9 main">
-                <div id="uno" class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <h1>Uno</h1>
+                <div class="row">
+                    <div id="weatherInCity" class="col-sm-12 col-md-12">
+                        <!-- <h1>Uno</h1> -->
                     </div>
                 </div>
-                <div id="dos" class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <h1>Dos</h1>
-                    </div>
-                </div>
-                <div id="tres" class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <h1>Tres</h1>
+                <div class="row">
+                    <div id="fiveDaysForecast" class="col-sm-12 col-md-12">
+                        <!-- <h1>Dos</h1> -->
                     </div>
                 </div>
             </div>
@@ -77,25 +91,49 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
+    let responsesArray = [];
+    let responsesString = localStorage.getItem("weatherResponses");
+    renderList();
+    //This ready function grab the localstorage varaibles of current responses
+    //and fill the array to render the app with persistent information
+    //let responsesString = localStorage.getItem("weatherResponses");
+
+
+
+    //submit form function to make an API weather call by city 
     $("form").on("submit", function(e) {
         e.preventDefault();
         const city = $('#city-txt').val();
+        //my API key
         var APIKey = "4ebb8d7264ca67547a6a7bdbe2deada9";
-        var url2 = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
-        var url1 = "http://api.openweathermap.org/data/2.5/weather?" +
-            "q=" + city + "&APPID=" + APIKey;
+        //url to make the queries for this API
+        var url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+        // Asyncronous javascript request usuing ajax
         $.ajax({
-            url: url2,
+            url: url,
             method: "GET"
         }).then(function(response) {
+            //Grabing response from API and printing to console
             console.log(response);
+            //Grabing response and storing in a localStorage variable
+            if (responsesString !== " ") {
+                responsesString = responsesString + JSON.stringify(response) + '///';
+            } else {
+                responsesString = JSON.stringify(response) + '///';
+            }
+
+            localStorage.setItem("weatherResponses", responsesString);
+            //Creating and adding a <li> element to the <ul> list-group 
             let cityEl = $("<li>");
             cityEl.text(response.name);
             cityEl.addClass("list-group-item");
             cityEl.addClass("citiesLi");
             cityEl.attr("data-name", response.name);
+            cityEl.on("click", alertCity);
             $("ul").append(cityEl);
+            $('#city-txt').val("");
         });
+
     });
 
     //Grabing click event from citi clicked
@@ -104,7 +142,27 @@
     //Function trigered by click on the cities
     function alertCity() {
         var city = $(this).attr("data-name");
-        alert(city);
+        //console.log(JSON.parse(localStorage.getItem(city)));
+    }
+
+    function renderList() {
+        $('<ul>').html("");
+        if (responsesString) {
+            responsesArray = responsesString.split('///');
+        } else {
+            responsesString = " ";
+        }
+        //console.log(responsesArray);
+        for (let i = 0; i < responsesArray.length - 1; i++) {
+            console.log(JSON.parse(responsesArray[i]));
+            let cityEl = $("<li>");
+            cityEl.text(JSON.parse(responsesArray[i]).name);
+            cityEl.addClass("list-group-item");
+            cityEl.addClass("citiesLi");
+            cityEl.attr("data-name", JSON.parse(responsesArray[i]).name);
+            cityEl.on("click", alertCity);
+            $("ul").append(cityEl);
+        }
     }
 </script>
 
