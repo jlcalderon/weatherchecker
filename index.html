@@ -149,20 +149,9 @@
             }
 
             localStorage.setItem("weatherResponses", responsesString);
-            //Creating and adding a <li> element to the <ul> list-group 
-
-            let cityEl = $("<li>");
-            cityEl.text(response.name);
-            cityEl.addClass("list-group-item");
-            cityEl.addClass("citiesLi");
-            cityEl.attr("data-name", response.name);
-            cityEl.attr("data-lon", response.coord.lon);
-            cityEl.attr("data-lat", response.coord.lat);
-            $("ul").append(cityEl);
-            $('#city-txt').val("");
             location.reload();
         });
-        $("<ul>").html("");
+
     });
 
     //Grabing click event from city clicked
@@ -174,8 +163,11 @@
         //console.log(selectedCity[0].name);
         const _dataCity = $("<h1>");
         let curday = moment().format('MM/DD/YY');
-        _dataCity.text(selectedCity[0].name + " " + curday + " " + selectedCity[0].weather[0].icon);
+        _dataCity.text(selectedCity[0].name + " " + curday);
+        const _dataIcon = $("<img>");
+        _dataIcon.attr("src", `http://openweathermap.org/img/w/${selectedCity[0].weather[0].icon}.png`);
         _dataContainer.append(_dataCity);
+        _dataContainer.append(_dataIcon);
 
         const _dataTemp = $("<p>");
         //var tempF = (response.main.temp - 273.15) * 1.80 + 32;
@@ -190,10 +182,20 @@
         _dataWindSpeed.text("Wind Speed: " + selectedCity[0].wind.speed);
         _dataContainer.append(_dataWindSpeed);
 
-        const _dataUVI = $("<p>");
-        _dataUVI.text("UV Index: " + selectedCity[0]);
-        _dataContainer.append(_dataUVI);
-        _dataContainer.attr("style", "display:block;");
+        //my API key
+        var APIKey = "4ebb8d7264ca67547a6a7bdbe2deada9";
+        //url to make the queries for this API
+        var urlQuery = `http://api.openweathermap.org/data/2.5/uvi/forecast?appid=${APIKey}&lat=${selectedCity[0].coord.lat}&lon=${selectedCity[0].coord.lon}&cnt=${1}`;
+        // Asyncronous javascript request usuing ajax
+        $.ajax({
+            url: urlQuery,
+            method: "GET"
+        }).then(function(response) {
+            const _dataUVI = $("<p>");
+            _dataUVI.text("UV Index: " + response[1].value);
+            _dataContainer.append(_dataUVI);
+            _dataContainer.attr("style", "display:block;");
+        });
     });
 
     function getCityWeather(_city) {
