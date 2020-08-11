@@ -87,6 +87,7 @@
                 <div class="row">
                     <div id="fiveDaysForecast" class="col-sm-12 col-md-12">
                         <!-- <h1>Dos</h1> -->
+
                     </div>
                 </div>
             </div>
@@ -99,6 +100,9 @@
     let responsesArray = [];
     let responsesString = localStorage.getItem("weatherResponses");
     renderList();
+    //testing unix time
+    console.log(moment.utc(1597168800));
+
     //This ready function grab the localstorage varaibles of current responses
     //and fill the array to render the app with persistent information
     //let responsesString = localStorage.getItem("weatherResponses");
@@ -195,6 +199,40 @@
             _dataUVI.text("UV Index: " + response[1].value);
             _dataContainer.append(_dataUVI);
             _dataContainer.attr("style", "display:block;");
+        });
+
+        const _dataFiveDaysForecastContainer = $("#fiveDaysForecast");
+        _dataFiveDaysForecastContainer.html("");
+        //my API key
+        var APIKey = "4ebb8d7264ca67547a6a7bdbe2deada9";
+        //url to make the queries for this API
+        var fiveDaysForcastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${selectedCity[0].coord.lat}&lon=${selectedCity[0].coord.lon}&exclude=current,minutely,hourly&units=imperial&appid=${APIKey}`;
+        // Asyncronous javascript request usuing ajax
+        $.ajax({
+            url: fiveDaysForcastUrl,
+            method: "GET"
+        }).then(function(response) {
+            for (let i = 0; i <= 4; i++) {
+                const forecastEL = $("<div>");
+                forecastEL.addClass("card");
+                forecastEL.attr("style", "width: 18rem;");
+                const forecastELBody = $("<div>");
+                forecastELBody.addClass("card-body");
+                const forecastELTitle = $("<h5>");
+                forecastELTitle.addClass("card-title");
+                forecastELTitle.text(response.daily[i].dt);
+                const _temp = $("<p>").text(response.daily[i].temp.day);
+                const _humidity = $("<p>").text(response.daily[i].humidity);
+                const _wind = $("<p>").text(response.daily[i].wind_speed);
+                const _uvI = $("<p>").text(response.daily[i].uvi);
+                forecastELBody.append(forecastELTitle);
+                forecastELBody.append(_temp);
+                forecastELBody.append(_humidity);
+                forecastELBody.append(_wind);
+                forecastELBody.append(_uvI);
+                forecastEL.append(forecastELBody);
+                _dataFiveDaysForecastContainer.append(forecastEL);
+            }
         });
     });
 
