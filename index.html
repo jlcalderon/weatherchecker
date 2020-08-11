@@ -77,7 +77,10 @@
             </div>
             <div calss="col-sm-8 col-md-9 main">
                 <div class="row">
-                    <div id="weatherInCity" class="col-sm-12 col-md-12">
+                    <div class="col-sm-12 col-md-12">
+                        <div id="weatherInCity" style="display: none;">
+
+                        </div>
                         <!-- <h1>Uno</h1> -->
                     </div>
                 </div>
@@ -94,7 +97,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
     let responsesArray = [];
-    let tempArray = [];
     let responsesString = localStorage.getItem("weatherResponses");
     renderList();
     //This ready function grab the localstorage varaibles of current responses
@@ -118,7 +120,8 @@
             cityEl.addClass("list-group-item");
             cityEl.addClass("citiesLi");
             cityEl.attr("data-name", JSON.parse(responsesArray[i]).name);
-            // cityEL.attr("data-long",JSON.parse(responsesArray[i]).);
+            cityEl.attr("data-lon", JSON.parse(responsesArray[i]).coord.lon);
+            cityEl.attr("data-lat", JSON.parse(responsesArray[i]).coord.lat);
             $("ul").append(cityEl);
         }
     }
@@ -153,10 +156,13 @@
             cityEl.addClass("list-group-item");
             cityEl.addClass("citiesLi");
             cityEl.attr("data-name", response.name);
+            cityEl.attr("data-lon", response.coord.lon);
+            cityEl.attr("data-lat", response.coord.lat);
             $("ul").append(cityEl);
             $('#city-txt').val("");
+            location.reload();
         });
-        $("<ul>").html(" ");
+        $("<ul>").html("");
     });
 
     //Grabing click event from city clicked
@@ -165,7 +171,7 @@
         const _dataContainer = $('#weatherInCity');
         _dataContainer.html("");
         const selectedCity = getCityWeather(city);
-        console.log(selectedCity[0].name);
+        //console.log(selectedCity[0].name);
         const _dataCity = $("<h1>");
         let curday = moment().format('MM/DD/YY');
         _dataCity.text(selectedCity[0].name + " " + curday + " " + selectedCity[0].weather[0].icon);
@@ -184,10 +190,14 @@
         _dataWindSpeed.text("Wind Speed: " + selectedCity[0].wind.speed);
         _dataContainer.append(_dataWindSpeed);
 
+        const _dataUVI = $("<p>");
+        _dataUVI.text("UV Index: " + selectedCity[0]);
+        _dataContainer.append(_dataUVI);
+        _dataContainer.attr("style", "display:block;");
     });
 
     function getCityWeather(_city) {
-
+        let tempArray = [];
         for (let j = 0; j < responsesArray.length - 1; j++) {
             tempArray.push(JSON.parse(responsesArray[j]));
         }
