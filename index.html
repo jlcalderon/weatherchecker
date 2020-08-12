@@ -20,7 +20,6 @@
         }
         
         .cities {
-            margin-left: 15px;
             padding: 3%;
             background-color: lightgray;
         }
@@ -36,9 +35,8 @@
         #weatherInCity {
             border: 2px solid gray;
             padding: 10px;
-            margin-left: 30px;
             margin-top: 10px;
-            width: 100%;
+            display: inline-block;
         }
         
         #fiveDaysForecast {
@@ -77,15 +75,12 @@
             </div>
             <div calss="col-sm-8 col-md-9 main">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <div id="weatherInCity" style="display: none;">
-
-                        </div>
+                    <div id="weatherInCity">
                         <!-- <h1>Uno</h1> -->
                     </div>
                 </div>
                 <div class="row">
-                    <div id="fiveDaysForecast" class="col-sm-12 col-md-12">
+                    <div id="fiveDaysForecast">
                         <!-- <h1>Dos</h1> -->
 
                     </div>
@@ -198,7 +193,7 @@
             const _dataUVI = $("<p>");
             _dataUVI.text("UV Index: " + response[1].value);
             _dataContainer.append(_dataUVI);
-            _dataContainer.attr("style", "display:block;");
+            //_dataContainer.attr("style", "display:inline-block;");
         });
 
         const _dataFiveDaysForecastContainer = $("#fiveDaysForecast");
@@ -215,16 +210,16 @@
             for (let i = 0; i <= 4; i++) {
                 const forecastEL = $("<div>");
                 forecastEL.addClass("card");
-                forecastEL.attr("style", "width: 18rem;");
+                forecastEL.attr("style", "width: 14rem; display:inline-block;");
                 const forecastELBody = $("<div>");
                 forecastELBody.addClass("card-body");
                 const forecastELTitle = $("<h5>");
                 forecastELTitle.addClass("card-title");
-                forecastELTitle.text(response.daily[i].dt);
-                const _temp = $("<p>").text(response.daily[i].temp.day);
-                const _humidity = $("<p>").text(response.daily[i].humidity);
-                const _wind = $("<p>").text(response.daily[i].wind_speed);
-                const _uvI = $("<p>").text(response.daily[i].uvi);
+                forecastELTitle.text("Forecast: " + response.daily[i].dt);
+                const _temp = $("<p>").text("Temperature F. : " + response.daily[i].temp.day);
+                const _humidity = $("<p>").text("Humidity: " + response.daily[i].humidity + " %");
+                const _wind = $("<p>").text("Wind Speed: " + response.daily[i].wind_speed);
+                const _uvI = $("<p>").text("UV Index: " + response.daily[i].uvi);
                 forecastELBody.append(forecastELTitle);
                 forecastELBody.append(_temp);
                 forecastELBody.append(_humidity);
