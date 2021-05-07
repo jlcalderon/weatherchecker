@@ -16,7 +16,7 @@ This application allows users to create a personalized list of cities, for revie
 
 ## Tech_Specs
 
-This application was developed with Plain Vanila Javascript and the server side API: `[OpenWeather API](https://openweathermap.org/api)` to retrieve weather data for the cities to look up. To keep a history persisten of the cities searched this app rely on the browser's  `localStorage`.
+This application was developed with Plain Vanila Javascript and the server side API: [OpenWeather API](https://openweathermap.org/api) to retrieve weather data for the cities to look up. To keep a history persisten of the cities searched this app rely on the browser's  `localStorage`.
 
 ## User_Story
 
