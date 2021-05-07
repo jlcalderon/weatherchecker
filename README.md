@@ -12,7 +12,7 @@
 * [Go to live app](https://jlcalderon.github.io/weatherchecker/)
 
 ## Overview
-This application allows users to create a personalized list of cities, for reviewing their weather conditions in the current week, so that they can plan a trip / activity accordingly. This is basically a weather dashboard that will run in your browser and feature dynamically updated to the HTML and CSS and store data in a persistent way.
+This application allows users to create a personalized list of cities, for reviewing their weather conditions in the current week, so that they can plan a trip / activity accordingly. This is basically a weather dashboard that will run in your browser and feature dynamically updates to the HTML and CSS and store data in a persistent way.
 
 ## Tech_Specs
 
